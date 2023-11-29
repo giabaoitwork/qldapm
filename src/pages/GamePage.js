@@ -51,13 +51,13 @@ function GamePage() {
             console.log(i === differentIndex);
             if (i === differentIndex) {
                 elements.push(
-                    <div key={i} onClick={(e) => handleSelect(e.curentTarger, true)} className="w-[100px] h-[100px]">
+                    <div key={i} onClick={(e) => handleSelect(e.curentTarger, true)} className="w-[90px] h-[90px]">
                         <img className="w-full h-full" src={assets.images.cowFalse} alt="" />
                     </div>,
                 );
             } else {
                 elements.push(
-                    <div key={i} onClick={(e) => handleSelect(e.currentTarget, false)} className="w-[100px] h-[100px]">
+                    <div key={i} onClick={(e) => handleSelect(e.currentTarget, false)} className="w-[90px] h-[90px]">
                         <img className="w-full h-full" src={assets.images.cowTrue} alt="" />
                     </div>,
                 );
