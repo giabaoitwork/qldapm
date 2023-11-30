@@ -7,6 +7,8 @@ import note from './note.svg';
 import phone from './phone.svg';
 import mail from './mail.svg';
 import arrow_right from './arrow_right.svg';
+import rank from './rank.svg';
+import human from './human.svg';
 
 const svg = {
     green_star,
@@ -18,6 +20,8 @@ const svg = {
     phone,
     mail,
     arrow_right,
+    rank,
+    human,
 };
 
 export default svg;
