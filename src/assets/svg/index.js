@@ -9,6 +9,8 @@ import mail from './mail.svg';
 import arrow_right from './arrow_right.svg';
 import rank from './rank.svg';
 import human from './human.svg';
+import eye from './eye.svg';
+import clock from './clock.svg';
 
 const svg = {
     green_star,
@@ -22,6 +24,8 @@ const svg = {
     arrow_right,
     rank,
     human,
+    eye,
+    clock,
 };
 
 export default svg;
