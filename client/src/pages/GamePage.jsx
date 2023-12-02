@@ -1,12 +1,14 @@
 import { useEffect, useState } from 'react';
 import assets from '../assets';
-
+import CallApi from '../api.js'
 function GamePage() {
-    const [currentRound, setCurrentRouund] = useState(1);
     const [countDown, setCountDown] = useState(600);
-    const [rowsAndCols, setRowsAndCols] = useState([10, 7]);
-    const [differentIndex, setDifferentIndex] = useState(Math.floor(Math.random() * rowsAndCols[0] * rowsAndCols[1]));
+    const [rowsAndCols, setRowsAndCols] = useState([0, 0]);
+    const [differentIndex, setDifferentIndex] = useState(0);
     const [suggestQuantity, setSuggestQuantity] = useState(3);
+    const [level, setLevel] = useState(1);
+    const [bonusScore, setbonusScore] = useState(0);
+    const [minusScore, setMinusScore] = useState(0);
     const formatCountDown = (countDown) => {
         const minutes = Math.floor(countDown / 60);
         const remainingSeconds = countDown % 60;
@@ -17,8 +19,8 @@ function GamePage() {
     };
 
 
+
     const handleSelect = (element, bool) => {
-        console.log(element);
         if (bool) {
             const divElement = document
                 .getElementById('wapper-game')
@@ -31,6 +33,11 @@ function GamePage() {
             borderDiv.className =
                 'w-full h-full absolute top-0 left-0 bg-transparent border-[5px] border-[red] rounded-full';
             divElement.appendChild(borderDiv);
+            setTimeout(() => {
+                setLevel(level + 1)
+                divElement.classList.remove('relative')
+                divElement.removeChild(borderDiv);
+            }, 1000)
         }
         if (!bool) {
             element.classList.add('shake');
@@ -48,8 +55,6 @@ function GamePage() {
     const renderImage = () => {
         const elements = [];
         for (let i = 0; i < rowsAndCols[0] * rowsAndCols[1]; i++) {
-            console.log(i, differentIndex);
-            console.log(i === differentIndex);
             if (i === differentIndex) {
                 elements.push(
                     <div key={i} onClick={(e) => handleSelect(e.curentTarger, true)} className="w-[90px] h-[90px]">
@@ -66,7 +71,7 @@ function GamePage() {
         }
         const gridContainerStyle = {
             display: 'grid',
-            gridTemplateColumns: 'repeat(' + rowsAndCols[0] + ', minmax(0, 1fr))',
+            gridTemplateColumns: 'repeat(' + rowsAndCols[1] + ', minmax(0, 1fr))',
             width: 'fit-content',
             height: 'fit-content',
         };
@@ -78,6 +83,13 @@ function GamePage() {
     };
 
     useEffect(() => {
+        CallApi.getLevel('1')
+        .then((response) => {
+            setRowsAndCols([response.data.row, response.data.col])
+        })
+        .catch((error) => {
+            console.error(error)
+        })
         const timer = setInterval(() => {
             setCountDown((prev) => {
                 if (prev > 0) return prev - 1;
@@ -89,11 +101,25 @@ function GamePage() {
         }, 1000);
     }, []);
 
+    useEffect(() => {
+        setDifferentIndex(Math.floor(Math.random() * rowsAndCols[0] * rowsAndCols[1]))
+    }, [rowsAndCols])
+
+    useEffect(() => {
+        CallApi.getLevel(level)
+        .then((response) => {
+            setRowsAndCols([response.data.row, response.data.col])
+        })
+        .catch((error) => {
+            console.error(error)
+        })
+    }, [level])
+
     return (
         <div className="flex flex-col h-full">
             <div className="flex justify-around items-center p-5 w-full bg-[#8EF924] h-[100px]">
                 <div className="flex justify-center p-2 items-center rounded-full bg-[#F54923]">
-                    <div className="text-[50px] text-white font-bold">Đề {currentRound}:</div>
+                    <div className="text-[50px] text-white font-bold">Đề {level}:</div>
                 </div>
                 <div>
                     <div className="text-[50px] text-white font-bolds">Tìm sự khác biệt</div>

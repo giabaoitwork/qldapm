@@ -2,7 +2,9 @@ const express = require('express');
 const app = express();
 const mysql = require('mysql2/promise');
 const Level = require('./Level')
+const cors = require('cors');
 require('dotenv').config();
+app.use(cors());
 const dbConfig = {
     host: process.env.HOST,
     user: process.env.USER,
@@ -26,11 +28,11 @@ app.get('/api/level/:id', async (req, res) => {
             res.status(200).json(new Level(rows[0].id, rows[0].row, rows[0].col, rows[0].bonus_score, rows[0].minus_score))
         }
         else {
-            req.status(500).status({ error: 'Level not found' })
+            res.status(500).status({ error: 'Level not found' })
         }
     }
     catch (error) {
-        req.status(500).status({ error: 'Internal Server Error' })
+        res.status(500).status({ error: 'Internal Server Error' })
     }
 })
 
