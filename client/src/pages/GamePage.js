@@ -16,6 +16,7 @@ function GamePage() {
         return formattedTime;
     };
 
+
     const handleSelect = (element, bool) => {
         console.log(element);
         if (bool) {
