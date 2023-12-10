@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import assets from '../assets';
+import { useNavigate } from 'react-router';
 
 function ReviewPage() {
     const listQuickReviews = ['Rất tệ', 'Bình thường', 'Rất hay', 'Tuyệt vời'];
@@ -7,6 +8,7 @@ function ReviewPage() {
     const [starScore, setStarScore] = useState(5);
     const [quickReview, setQuickReview] = useState('');
     const [detailReview, setDetailReview] = useState('');
+    const navigate = useNavigate();
 
     const handleScore = (position) => {
         setStarScore(position);
@@ -15,7 +17,10 @@ function ReviewPage() {
         setDetailReview(event.target.value);
     };
 
-    const handleSendReview = () => {};
+    const handleSendReview = () => {
+        // post review to server
+        navigate('/all_review');
+    };
 
     useEffect(() => {
         console.log(starScore, quickReview, detailReview);
