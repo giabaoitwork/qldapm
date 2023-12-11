@@ -13,12 +13,6 @@ function HomePage() {
         console.log('Game started!');
         // Thêm các hàm xử lý khác tại đây
     };
-
-    const handleViewReviewClick = () => {
-        // Xử lý khi nút "Xem Đánh Giá" được click
-        console.log('View review clicked!');
-        // Thêm các hàm xử lý khác tại đây
-    };
     const cssObj = {
         display: 'flex',
         flexDirection: 'column',
@@ -59,7 +53,7 @@ function HomePage() {
                                     style={{ backgroundColor: '#00FFB0', borderColor: 'white' }}
                                     variant="primary"
                                     size="lg"
-                                    onClick={handleViewReviewClick}
+                                    onClick={() => navigate('/all_review')}
                                 >
                                     Xem Đánh Giá
                                 </Button>
