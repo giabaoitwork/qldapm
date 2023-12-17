@@ -9,5 +9,13 @@ class CallApi {
         return api.get(`/api/level/${id}`)
     }
 
+    getGame(id) {
+        return api.get(`/api/game/${id}`)
+    }
+
+    getRound(gameId, levelId) {
+        return api.post('/api/round', { gameId: gameId, levelId: levelId })
+    }
+
 }
 export default new CallApi();

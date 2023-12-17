@@ -121,52 +121,57 @@ function AllReviewPage() {
     };
 
     return (
-        <div className="flex flex-col justify-center items-center absolute px-5 py-10 bg-white rounded-[30px] top-[50%] left-[50%] -translate-x-[50%] -translate-y-[50%]">
+        <div className="h-[600px] flex flex-col justify-center items-center absolute px-5 py-10 bg-white rounded-[30px] top-[50%] left-[50%] -translate-x-[50%] -translate-y-[50%]">
             <img
                 className="absolute w-[100px] top-0 right-0 translate-x-[30%] -translate-y-[20%]"
                 src={assets.svg.eye}
                 alt=""
             />
             <div className="font-bold text-[36px] italic mb-4">Xem đánh giá của người chơi về trò chơi</div>
-            <div>
-                <div className="flex gap-3 items-center mb-9">{renderFillterStar()}</div>
-                <div className="flex gap-10 flex-wrap justify-center">
-                    <div className="flex-1 min-w-[500px] w-[100%] h-[600px] overflow-auto">
-                        {userReviews.map((userReview, index) => {
-                            return (
-                                <div className="flex border-b mt-2 pb-2" key={index}>
-                                    <img className="w-[50px] h-[50px]" src={assets.svg.human} alt="" />
-                                    <div className="items-center">
-                                        <div className="flex">
-                                            <div className="mr-4 text-[26px]">{userReview.name}</div>
-                                            <div className="flex gap-2 items-center">
-                                                <img src={assets.svg.clock} alt="" />
-                                                <div>{userReview.time}</div>
+            <div className="flex flex-wrap h-[70%] overflow-auto justify-center">
+                <div className="overflow-y-auto">
+                    <div className="flex gap-3 items-center mb-9">{renderFillterStar()}</div>
+                    <div className="flex gap-10 flex-wrap justify-center">
+                        <div className="flex-1 min-w-[500px] w-[100%] overflow-auto">
+                            {userReviews.map((userReview, index) => {
+                                return (
+                                    <div className="flex border-b mt-2 pb-2" key={index}>
+                                        <img className="w-[50px] h-[50px]" src={assets.svg.human} alt="" />
+                                        <div className="items-center">
+                                            <div className="flex">
+                                                <div className="mr-4 text-[26px]">{userReview.name}</div>
+                                                <div className="flex gap-2 items-center">
+                                                    <img src={assets.svg.clock} alt="" />
+                                                    <div>{userReview.time}</div>
+                                                </div>
                                             </div>
-                                        </div>
-                                        <div className="flex gap-3">
-                                            <div className="flex gap-2">{renderStar(userReview.scores)}</div>
-                                            <div className="px-4 py-1 border rounded-[30px]">
-                                                {userReview.quickReview}
+                                            <div className="flex gap-3">
+                                                <div className="flex gap-2">{renderStar(userReview.scores)}</div>
+                                                <div className="px-4 py-1 border rounded-[30px]">
+                                                    {userReview.quickReview}
+                                                </div>
                                             </div>
+                                            <div className="max-w-[400px]">{userReview.detailReview}</div>
                                         </div>
-                                        <div className="max-w-[400px]">{userReview.detailReview}</div>
                                     </div>
-                                </div>
-                            );
-                        })}
-                    </div>
-                    <div className="min-w-[300px]">
-                        <div className="flex flex-col justify-center items-center gap-3 mb-5">
-                            <div>{avgScore()}/5</div>
-                            <div className="flex gap-3">{renderStar(avgScore())}</div>
-                            <div>5 Đánh giá</div>
+                                );
+                            })}
                         </div>
-                        <div>{renderChart()}</div>
                     </div>
                 </div>
+                <div className="min-w-[300px]">
+                    <div className="flex flex-col justify-center items-center gap-3 mb-5">
+                        <div>{avgScore()}/5</div>
+                        <div className="flex gap-3">{renderStar(avgScore())}</div>
+                        <div>5 Đánh giá</div>
+                    </div>
+                    <div>{renderChart()}</div>
+                </div>
             </div>
-            <div className="flex px-4 py-2 mt-3 gap-3 rounded-[30px] border bg-[#00FFB0] cursor-pointer">
+            <div
+                onClick={() => navigate('/')}
+                className="flex px-4 py-2 mt-3 gap-3 rounded-[30px] border bg-[#00FFB0] cursor-pointer"
+            >
                 <img className="rotate-180" src={assets.svg.arrow_right} alt="" />
                 <div className="text-[32px]" onClick={handleClick}>
                     Trở về

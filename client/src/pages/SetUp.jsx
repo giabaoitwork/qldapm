@@ -28,7 +28,6 @@ function SetUp() {
         navigate('/game');
     };
 
-    const handleCreateRoom = () => {};
     return (
         <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh' }}>
             <div style={cssObj}>

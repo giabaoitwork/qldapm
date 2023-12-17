@@ -1,24 +1,67 @@
 import { useEffect, useState } from 'react';
 import assets from '../assets';
-import CallApi from '../api.js'
+import CallApi from '../api.js';
+import { useNavigate } from 'react-router';
 function GamePage() {
-    const [countDown, setCountDown] = useState(600);
     const [rowsAndCols, setRowsAndCols] = useState([0, 0]);
     const [differentIndex, setDifferentIndex] = useState(0);
-    const [suggestQuantity, setSuggestQuantity] = useState(3);
+    const [suggestQuantity, setSuggestQuantity] = useState(0);
     const [level, setLevel] = useState(1);
     const [bonusScore, setbonusScore] = useState(0);
     const [minusScore, setMinusScore] = useState(0);
+    const [time, setTime] = useState(0);
+    const [gameId, setGameId] = useState(0);
+    const [scr, setScr] = useState(null);
+    const [scrOther, setScrOther] = useState(null);
+    const [score, setScore] = useState(0);
+    const navigate = useNavigate();
     const formatCountDown = (countDown) => {
         const minutes = Math.floor(countDown / 60);
         const remainingSeconds = countDown % 60;
 
-        const formattedTime = `${minutes > 0 ? `${minutes}p` : ''}${remainingSeconds}s`;
+        const formattedTime = `${minutes > 0 ? `${minutes}:` : ''}${remainingSeconds}`;
 
         return formattedTime;
     };
 
+    const handleCallLevel = () => {
+        CallApi.getLevel(level)
+            .then((response) => {
+                setRowsAndCols([response.data.row, response.data.col]);
+                setLevel(response.data.id);
+                setbonusScore(response.data.bonusScore);
+                setMinusScore(response.data.minusScore);
+            })
+            .catch((error) => {
+                console.error(error);
+            });
+    };
 
+    const handleCallGame = () => {
+        CallApi.getGame(1)
+            .then((response) => {
+                setGameId(response.data.id);
+                setSuggestQuantity(response.data.suggest);
+                setTime(response.data.gameTime - 1);
+            })
+            .catch((error) => {
+                console.error(error);
+            });
+    };
+
+    const handleCallRound = () => {
+        console.log(gameId, level);
+        const googleStorage = `https://storage.googleapis.com/image_qlda/${gameId}/lv${level}/`;
+        CallApi.getRound(gameId, level)
+            .then((response) => {
+                console.log(googleStorage + response.data.scr);
+                setScr(googleStorage + response.data.scr);
+                setScrOther(googleStorage + response.data.scrOther);
+            })
+            .catch((error) => {
+                console.error(error);
+            });
+    };
 
     const handleSelect = (element, bool) => {
         if (bool) {
@@ -33,23 +76,26 @@ function GamePage() {
             borderDiv.className =
                 'w-full h-full absolute top-0 left-0 bg-transparent border-[5px] border-[red] rounded-full';
             divElement.appendChild(borderDiv);
+            setScore((prev) => prev + bonusScore);
             setTimeout(() => {
-                setLevel(level + 1)
-                divElement.classList.remove('relative')
+                setLevel(level + 1);
+                divElement.classList.remove('relative');
                 divElement.removeChild(borderDiv);
-            }, 1000)
+            }, 1000);
         }
         if (!bool) {
+            setScore((prev) => prev - minusScore);
             element.classList.add('shake');
             setTimeout(() => element.classList.remove('shake'), 500);
         }
     };
 
-    const handleSuggset = () => {
+    const handleSuggest = () => {
         if (suggestQuantity <= 0) return;
         const imgElement = document.getElementById('wapper-game').querySelector(`div:nth-child(${differentIndex + 1})`);
         imgElement.classList.add('border-[2px]', 'border-[red]');
         setSuggestQuantity((prev) => prev - 1);
+        setScore((prev) => prev - minusScore);
     };
 
     const renderImage = () => {
@@ -58,13 +104,13 @@ function GamePage() {
             if (i === differentIndex) {
                 elements.push(
                     <div key={i} onClick={(e) => handleSelect(e.curentTarger, true)} className="w-[90px] h-[90px]">
-                        <img className="w-full h-full" src={assets.images.cowFalse} alt="" />
+                        <img className="w-full h-full" src={scr} alt="" />
                     </div>,
                 );
             } else {
                 elements.push(
                     <div key={i} onClick={(e) => handleSelect(e.currentTarget, false)} className="w-[90px] h-[90px]">
-                        <img className="w-full h-full" src={assets.images.cowTrue} alt="" />
+                        <img className="w-full h-full" src={scrOther} alt="" />
                     </div>,
                 );
             }
@@ -83,15 +129,10 @@ function GamePage() {
     };
 
     useEffect(() => {
-        CallApi.getLevel('1')
-        .then((response) => {
-            setRowsAndCols([response.data.row, response.data.col])
-        })
-        .catch((error) => {
-            console.error(error)
-        })
+        handleCallGame();
+        handleCallLevel();
         const timer = setInterval(() => {
-            setCountDown((prev) => {
+            setTime((prev) => {
                 if (prev > 0) return prev - 1;
                 else {
                     clearInterval(timer);
@@ -102,18 +143,22 @@ function GamePage() {
     }, []);
 
     useEffect(() => {
-        setDifferentIndex(Math.floor(Math.random() * rowsAndCols[0] * rowsAndCols[1]))
-    }, [rowsAndCols])
+        handleCallRound();
+    }, [gameId, level]);
 
     useEffect(() => {
-        CallApi.getLevel(level)
-        .then((response) => {
-            setRowsAndCols([response.data.row, response.data.col])
-        })
-        .catch((error) => {
-            console.error(error)
-        })
-    }, [level])
+        setDifferentIndex(Math.floor(Math.random() * rowsAndCols[0] * rowsAndCols[1]));
+    }, [rowsAndCols]);
+
+    useEffect(() => {
+        handleCallLevel();
+    }, [level]);
+
+    useEffect(() => {
+        if (level > 5) {
+            navigate('/review');
+        }
+    });
 
     return (
         <div className="flex flex-col h-full">
@@ -121,25 +166,28 @@ function GamePage() {
                 <div className="flex justify-center p-2 items-center rounded-full bg-[#F54923]">
                     <div className="text-[50px] text-white font-bold">Đề {level}:</div>
                 </div>
+
                 <div>
                     <div className="text-[50px] text-white font-bolds">Tìm sự khác biệt</div>
                     <img src="" alt="" />
                 </div>
+                <div className="flex justify-center p-2 items-center rounded-full bg-[#F54923]">
+                    <div className="text-[50px] text-white font-bold">Điểm {score}</div>
+                </div>
+
                 <div>
                     <img src="" alt="" />
-                    <div className="text-[50px] text-white font-bolds">{formatCountDown(countDown)}</div>
+                    <div className="text-[50px] text-white font-bolds">{formatCountDown(time)}</div>
                 </div>
-            </div>
-            <div className="flex relative justify-center items-center w-full h-full">
-                {renderImage()}
                 <div
-                    onClick={() => handleSuggset()}
-                    className="flex gap-3 justify-center items-center rounded-2xl px-5 absolute bottom-3 right-3 bg-[#4285f4] cursor-pointer"
+                    onClick={() => handleSuggest()}
+                    className="flex gap-3 justify-center items-center rounded-2xl px-5 bg-[#4285f4] cursor-pointer"
                 >
                     <img src={assets.svg.suggest} alt="" />
                     <div className="text-white font-boid text-[50px]">Gợi ý ({suggestQuantity})</div>
                 </div>
             </div>
+            <div className="flex relative justify-center items-center w-full h-full">{renderImage()}</div>
         </div>
     );
 }
