@@ -4,7 +4,7 @@ import assets from '../assets';
 import React from 'react';
 import { Button, Container, Row, Col } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
-
+import MyModal from './Modal';
 function SetUp() {
     const cssObj = {
         display: 'flex',
@@ -21,13 +21,16 @@ function SetUp() {
 
     const [isHoveredButton1, setHoveredButton1] = useState(false);
     const [isHoveredButton2, setHoveredButton2] = useState(false);
-
+    const [modalShow, setModalShow] = useState(false);
     const navigate = useNavigate();
 
     const handleJoin = () => {
-        navigate('/game');
+        setModalShow(true)
     };
 
+    const handleCreateRoom = () => {
+        navigate('/begin')
+    };
     return (
         <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh' }}>
             <div style={cssObj}>
@@ -97,7 +100,7 @@ function SetUp() {
                                         }}
                                         variant="primary"
                                         size="lg"
-                                        onClick={handleJoin}
+                                        onClick={handleCreateRoom}
                                         onMouseOver={() => setHoveredButton2(true)}
                                         onMouseOut={() => setHoveredButton2(false)}
                                     >
@@ -106,6 +109,10 @@ function SetUp() {
                                 </Col>
                             </Row>
                         </Container>
+                        <MyModal
+                            show={modalShow}
+                            onHide={() => setModalShow(false)}
+                        />
                     </div>
                 </div>
             </div>

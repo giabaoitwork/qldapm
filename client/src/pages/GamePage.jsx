@@ -2,7 +2,9 @@ import { useEffect, useState } from 'react';
 import assets from '../assets';
 import CallApi from '../api.js';
 import { useNavigate } from 'react-router';
+import { useParams } from 'react-router-dom';
 function GamePage() {
+    const { id } = useParams();
     const [rowsAndCols, setRowsAndCols] = useState([0, 0]);
     const [differentIndex, setDifferentIndex] = useState(0);
     const [suggestQuantity, setSuggestQuantity] = useState(0);
@@ -14,6 +16,7 @@ function GamePage() {
     const [scr, setScr] = useState(null);
     const [scrOther, setScrOther] = useState(null);
     const [score, setScore] = useState(0);
+    const [timeCurent, setTimeCurent] = useState(0)
     const navigate = useNavigate();
     const formatCountDown = (countDown) => {
         const minutes = Math.floor(countDown / 60);
@@ -38,11 +41,12 @@ function GamePage() {
     };
 
     const handleCallGame = () => {
-        CallApi.getGame(1)
+        CallApi.getGame(id)
             .then((response) => {
                 setGameId(response.data.id);
                 setSuggestQuantity(response.data.suggest);
                 setTime(response.data.gameTime - 1);
+                setTimeCurent(response.data.gameTime)
             })
             .catch((error) => {
                 console.error(error);
@@ -50,7 +54,6 @@ function GamePage() {
     };
 
     const handleCallRound = () => {
-        console.log(gameId, level);
         const googleStorage = `https://storage.googleapis.com/image_qlda/${gameId}/lv${level}/`;
         CallApi.getRound(gameId, level)
             .then((response) => {
@@ -155,10 +158,12 @@ function GamePage() {
     }, [level]);
 
     useEffect(() => {
-        if (level > 5) {
-            navigate('/review');
+        if (level > 5 || time === 0) {
+            navigate(`/userinfo/${id}/${timeCurent - time}/${score}`);
         }
     });
+
+
 
     return (
         <div className="flex flex-col h-full">

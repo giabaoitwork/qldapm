@@ -1,14 +1,24 @@
 import { useEffect, useState } from 'react';
 import assets from '../assets';
-
+import CallApi from '../api.js';
+import { useParams, useNavigate } from 'react-router-dom';
 function UserInfoPage() {
     const [name, setName] = useState('');
     const [phone, setPhone] = useState('');
     const [email, setEmail] = useState('');
+    const { gameId, time, score } = useParams();
+    const navigate = useNavigate();
 
-    useEffect(() => {
-        console.log(name, phone, email);
-    }, [name, phone, email]);
+    const addUser = () => {
+        CallApi.saveUser(name, phone, email, time, score, gameId)
+            .then((response) => {
+                console.log(response.data.message)
+                navigate(`/rank/${gameId}`)
+            })
+            .catch((error) => {
+                console.log((error))
+            })
+    }
     return (
         <div className="absolute p-10 flex gap-10 flex-col rounded-[30px] items-center w-[500px] bg-white left-[50%] top-[50%] -translate-x-[50%] -translate-y-[50%]">
             <img
@@ -52,7 +62,7 @@ function UserInfoPage() {
                     </div>
                 </div>
             </div>
-            <div className="flex items-center justify-center gap-4 px-10 py-4 bg-[#00FFB0] rounded-[30px] cursor-pointer">
+            <div onClick={addUser} className="flex items-center justify-center gap-4 px-10 py-4 bg-[#00FFB0] rounded-[30px] cursor-pointer">
                 <img src={assets.svg.arrow_right} alt="" />
                 <div className="text-2xl">Tiếp tục</div>
             </div>
