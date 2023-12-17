@@ -12,6 +12,7 @@ import human from './human.svg';
 import eye from './eye.svg';
 import clock from './clock.svg';
 
+
 const svg = {
     green_star,
     yellow_star,
@@ -26,6 +27,7 @@ const svg = {
     human,
     eye,
     clock,
+
 };
 
 export default svg;
