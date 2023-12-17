@@ -43,7 +43,7 @@ function HomePage() {
                     src="https://scontent.xx.fbcdn.net/v/t1.15752-9/385526164_1026054271847466_7864728018404994163_n.png?_nc_cat=110&ccb=1-7&_nc_sid=510075&_nc_ohc=m_6Eh1UXQtgAX_wiaRD&_nc_ad=z-m&_nc_cid=0&_nc_ht=scontent.xx&oh=03_AdR-zrtBiFwxhUM1L_b1m7Xvlp90QMMGTNHO3CAYEnUaEg&oe=65926C9F"
                     alt=""
                     style={imgStyle}
-                    onClick={() => navigate('/begin')}
+                    onClick={() => navigate('/setup')}
                 />
                 <div className="content">
                     <Container className="mt-5">
@@ -53,9 +53,9 @@ function HomePage() {
                                     style={{ backgroundColor: '#00FFB0', borderColor: 'white' }}
                                     variant="primary"
                                     size="lg"
-                                    onClick={() => navigate('/all_review')}
+                                    onClick={() => navigate('/setup')}
                                 >
-                                    Xem Đánh Giá
+                                    Bắt đầu
                                 </Button>
                             </Col>
                         </Row>

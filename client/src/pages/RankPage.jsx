@@ -1,12 +1,21 @@
+import { useEffect, useState } from 'react';
 import assets from '../assets';
-
+import { useParams } from 'react-router-dom';
+import CallApi from '../api.js';
 function RankPage() {
-    const listUser = [
-        { name: 'Hồ Thanh Hoài An', score: 2000, time: 100 },
-        { name: 'Phạm Gia Bảo', score: 1800, time: 150 },
-        { name: 'Cao Sỹ Bel', score: 1600, time: 120 },
-        { name: 'Đỗ Phú Nguyên Chương', score: 1400, time: 90 },
-    ];
+    const { id } = useParams();
+    const [listUser, setListUser] = useState([])
+
+    useEffect(() => {
+        CallApi.getRank(id)
+            .then((response) => {
+                setListUser(response.data)
+            })
+            .catch((error) => {
+                console.error(error)
+            })
+    }, [])
+
 
     return (
         <div className="absolute top-[50%] left-[50%] -translate-x-[50%] -translate-y-[50%] flex flex-col gap-5 w-fit m-auto">
@@ -24,8 +33,7 @@ function RankPage() {
                             <div className="">
                                 <div className="text-white text-2xl">{user.name}</div>
                                 <div className="flex justify-between items-center">
-                                    <div className="text-white text-lg">{user.score} điểm</div>
-                                    {/* <div className="text-white text-2xl">{user.time}s</div> */}
+                                    <div className="text-white text-lg">{user.score} điểm {user.timeEnd}s</div>
                                 </div>
                             </div>
                         </div>
