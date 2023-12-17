@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import assets from '../assets';
+import { useNavigate } from 'react-router-dom';
 
 function AllReviewPage() {
     const listUser = [
@@ -35,6 +36,11 @@ function AllReviewPage() {
 
     const [userReviews, setUserReviews] = useState(listUser);
 
+    const navigate = useNavigate();
+
+    function handleClick() {
+        navigate('/');
+    }
     const getListScore = () => {
         return listUser.map((userReview) => userReview.scores);
     };
@@ -162,7 +168,9 @@ function AllReviewPage() {
             </div>
             <div className="flex px-4 py-2 mt-3 gap-3 rounded-[30px] border bg-[#00FFB0] cursor-pointer">
                 <img className="rotate-180" src={assets.svg.arrow_right} alt="" />
-                <div className="text-[32px]">Trở về</div>
+                <div className="text-[32px]" onClick={handleClick}>
+                    Trở về
+                </div>
             </div>
         </div>
     );

@@ -7,6 +7,7 @@ import RankPage from './pages/RankPage';
 import AllReviewPage from './pages/AllReviewPage';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import HomePage from './pages/HomePage';
+import SetUp from './pages/SetUp';
 function App() {
     return (
         <Router>
@@ -18,6 +19,9 @@ function App() {
                     <Route path="/userinfo" element={<UserInfoPage />} />
                     <Route path="/rank" element={<RankPage />} />
                     <Route path="/review" element={<ReviewPage />} />
+                    <Route path="/all_review" element={<AllReviewPage />} />
+                    <Route path="/setup" element={<SetUp />} />
+
                 </Routes>
             </div>
         </Router>
