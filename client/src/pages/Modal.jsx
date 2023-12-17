@@ -3,10 +3,21 @@ import Modal from 'react-bootstrap/Modal';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-
+import CallApi from '../api.js';
 function MyModal(props) {
   const navigate = useNavigate();
   const [id, setId] = useState()
+  const findRoom = () => {
+    CallApi.getGame(id)
+      .then((response) => {
+        navigate(`/game/${response.data.id}`)
+
+      })
+      .catch((error) => {
+        console.error(error);
+        alert("Không tim thấy phòng")
+      });
+  }
   return (
     <Modal
       {...props}
@@ -29,7 +40,7 @@ function MyModal(props) {
       </Modal.Body>
       <Modal.Footer>
         <Button onClick={props.onHide}>Đóng</Button>
-        <Button onClick={() => navigate(`/game/${id}`)}>Xác nhận</Button>
+        <Button onClick={findRoom}>Xác nhận</Button>
       </Modal.Footer>
     </Modal>
   );
