@@ -20,8 +20,6 @@ function App() {
                     <Route path="/game/:id" element={<GamePage />} />
                     <Route path="/userinfo/:gameId/:time/:score" element={<UserInfoPage />} />
                     <Route path="/rank/:id" element={<RankPage />} />
-                    <Route path="/review" element={<ReviewPage />} />
-                    <Route path='/all_review' element={<AllReviewPage />} />
                     <Route path='/begin' element={<BeginPage />} />
                     <Route path='/setup' element={<SetUp />} />
                     <Route path='/player/:id' element={<Table />} />
