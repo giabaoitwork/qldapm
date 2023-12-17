@@ -11,7 +11,7 @@ function GamePage() {
     const [level, setLevel] = useState(1);
     const [bonusScore, setbonusScore] = useState(0);
     const [minusScore, setMinusScore] = useState(0);
-    const [time, setTime] = useState(0);
+    const [time, setTime] = useState(null);
     const [gameId, setGameId] = useState(0);
     const [scr, setScr] = useState(null);
     const [scrOther, setScrOther] = useState(null);
